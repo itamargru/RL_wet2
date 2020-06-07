@@ -49,7 +49,7 @@ def fill_reward():
 def solve_blackjack(iterations=1000):
     reward = fill_reward()
     V = np.zeros((X_states[-1] + 1, cards_value[cards[-1]] + 1))
-    policy = V
+    policy = V.copy()
     for i in range(iterations):
         for y in Y_states:
             for x in reversed(X_states):
@@ -73,6 +73,16 @@ def plot_policy(policy):
     ax.set_xticklabels(np.arange(dealer_edge[0], dealer_edge[1] + 1))
     ax.set_yticks(np.arange(player_edge[1] - player_edge[0] + 1))
     ax.set_yticklabels(np.arange(player_edge[0], player_edge[1] + 1))
+
+    ax.set_xlabel("dealer's card value")
+    ax.set_ylabel("player's sum of cards value")
+
+    txt_hit = 'Hit Zone'
+    txt_stick = 'Stick Zone'
+    plt.text(3, 15, txt_stick, color="white")
+    plt.text(3, 1, txt_hit)
+
+    plt.savefig("Policy_Plot.png")
     plt.show()
 
 
@@ -83,8 +93,13 @@ def plot_V_function(V):
     X, Y = np.meshgrid(np.arange(dealer_edge[0], dealer_edge[1] + 1), np.arange(player_edge[1] - player_edge[0] + 1))
     fig = plt.figure()
     ax = fig.gca(projection='3d')
+    ax.invert_yaxis()
+    ax.set_xlabel("dealer's card value")
+    ax.set_ylabel("player's sum of cards value")
+    ax.set_title("Value function")
 
     surf = ax.plot_surface(X, Y, V)
+    plt.savefig("Value_Plot.png")
     plt.show()
 
 
@@ -92,7 +107,6 @@ def main():
     V, policy = solve_blackjack()
     plot_V_function(V)
     plot_policy(policy)
-    a = 0
 
 
 if __name__ == "__main__":
