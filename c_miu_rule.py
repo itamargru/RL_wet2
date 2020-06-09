@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def initial_states():
     states = []
@@ -48,9 +49,38 @@ def random_policy():
         policy += [k]
     return policy
 
-# policy_0 = [0, 0, 0, 1, 0, 4, 2, 3, 0, 8, 2, 9, 8, 9, 10, 14, 0, 16, 2, 17, 16, 17, 6, 7, 8, 24, 10, 25, 20, 21, 28, 27]
+def max_cost_policy():
+    policy = []
+    for state in states:
+        max_val = np.argmax(state * cost)
+        policy += [max_val]
+    return policy
+
+def plot_policy(policy):
+
+    # policy = policy[player_edge[0] : player_edge[1] + 1, dealer_edge[0]:]
+    fig, ax = plt.subplots()
+    ax.imshow(policy, origin='lower')
+    # ax.set_xticks(np.arange(dealer_edge[1] - dealer_edge[0] + 1))
+    # ax.set_xticklabels(np.arange(dealer_edge[0], dealer_edge[1] + 1))
+    # ax.set_yticks(np.arange(player_edge[1] - player_edge[0] + 1))
+    # ax.set_yticklabels(np.arange(player_edge[0], player_edge[1] + 1))
+
+    ax.set_xlabel("dealer's card value")
+    ax.set_ylabel("player's sum of cards value")
+
+    txt_hit = 'Hit Zone'
+    txt_stick = 'Stick Zone'
+    # plt.text(3, 15, txt_stick, color="white")
+    # plt.text(3, 1, txt_hit)
+
+    plt.savefig("Policy_Plot_server.png")
+    plt.show()
 
 if __name__ == "__main__":
-    policy = random_policy()
+    # policy = [0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1,
+    #            0]
+    policy = max_cost_policy()
     V = calc_V_given_policy(policy, states)
+    plot_policy(policy)
     pass
